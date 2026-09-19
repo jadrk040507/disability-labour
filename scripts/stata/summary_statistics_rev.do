@@ -1,5 +1,6 @@
 * Load the dataset
-use "C:\Users\0251520\Documents\ENIGH - Majo Favela\STATA_MMP_2022\Bases\disability_work.dta", replace
+* Run this do-file from the repository root.
+use "data/processed/disability_work.dta", clear
 
 * Create cause_dis variable
 gen cause_dis = 0

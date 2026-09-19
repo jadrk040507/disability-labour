@@ -1,0 +1,7 @@
+.Rhistory
+.RData
+.Rproj.user/
+__pycache__/
+*.py[cod]
+data/raw/
+data/processed/

@@ -1,4 +1,5 @@
-use "C:\Users\34611\Documents\MEF files\TFM\ENIGH_CONEVALdata_2020 - mod\Bases\disability_work.dta"
+* Run this do-file from the repository root.
+use "data/processed/disability_work.dta", clear
 
 gen cause_dis = 0
 replace cause_dis = 1 if cause_walk == 1

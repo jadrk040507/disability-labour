@@ -18,4 +18,8 @@ This repository contains code used to build and analyze datasets from the **Encu
 2. Run `python scripts/python/Base_creation.py` (or `base_creation_rev.py`) to build the merged dataset. Output files will be written to `data/processed/`.
 3. Additional analyses such as regressions or summary statistics can be executed using the remaining scripts in `scripts/python`.
 
-All paths in the Python files are now relative to the repository root, which makes the code portable across systems.
+The Python, R, and Stata entry points use repository-relative paths. Run them from the repository root. The raw and processed data directories are ignored so that restricted microdata and derived person-level files are not committed accidentally.
+
+## Scope
+
+This is a research-code repository rather than a packaged library. The Python workflow is the primary reproducible path; the R and Stata files preserve model and data-preparation variants and may require version-specific adjustments. Results from survey microdata should account for the ENIGH sampling design before they are used for population inference.

@@ -3,10 +3,9 @@ rm(list = ls())
 library(tidyverse)
 library(broom)
 
-setwd("C:/Users/ediaz/OneDrive - up.edu.mx/Research/Majo Favela")
-
-b2020 <- read.csv("Python_MMP_2020/Bases/disability_work.csv")
-b2022 <- read.csv("Python_MMP_2022/Bases/disability_work.csv")
+project_root <- normalizePath(getwd())
+b2020 <- read.csv(file.path(project_root, "data", "processed", "disability_work_2020.csv"))
+b2022 <- read.csv(file.path(project_root, "data", "processed", "disability_work_2022.csv"))
 
 # Create missing columns
 b2020 <- b2020 %>%

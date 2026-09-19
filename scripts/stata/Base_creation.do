@@ -3,7 +3,8 @@
 clear
 cap log close;
 
-cd "C:\Users\34611\Documents\MEF files\TFM\ENIGH_CONEVALdata_2020 - mod"
+* Run this do-file from the repository root.
+capture mkdir "data/processed"
 
 ********************************************************************************
 *                                                                              *
@@ -11,7 +12,7 @@ cd "C:\Users\34611\Documents\MEF files\TFM\ENIGH_CONEVALdata_2020 - mod"
 *                                                                              *
 ********************************************************************************
 
-use "Bases de datos\trabajos.dta"
+use "data/raw/trabajos.dta"
 
 *only keeping information on main occupation
 drop if id_trabajo != "1"
@@ -70,7 +71,7 @@ label var scian "Classification of economic activity the individual is employed 
 keep folioviv foliohog numren subor self_emp htrab sinco scian leg_ben extra_ben informal tempo no_pay no_wage
 sort folioviv foliohog numren
 
-save "$Bases\work_english.dta", replace
+save "data/processed/work_english.dta", replace
 
 
 ********************************************************************************
@@ -79,7 +80,7 @@ save "$Bases\work_english.dta", replace
 *                                                                              *
 ********************************************************************************
 clear
-use "Bases de datos\ingresos.dta"
+use "data/raw/ingresos.dta"
 drop mes*
 drop ing_tri
 
@@ -115,7 +116,7 @@ label var other "Monthly average of other sources of income for the individual"
 keep folioviv foliohog numren wage work_inc dis_ben other
 sort folioviv foliohog numren
 
-save "Bases\income_english.dta", replace
+save "data/processed/income_english.dta", replace
 
 ********************************************************************************
 *                                                                              *
@@ -123,7 +124,7 @@ save "Bases\income_english.dta", replace
 *                                                                              *
 ********************************************************************************
 clear
-use "Bases de datos\poblacion"
+use "data/raw/poblacion.dta"
 *following what CONEVAL does to estimate the poverty index, we exclude people who are in the household as housekeepers or guests
 drop if parentesco>="400" & parentesco <"500"
 drop if parentesco>="700" & parentesco <"800"
@@ -321,7 +322,7 @@ label var job_seeking "Individual reports looking for work last week"
 label var pea "Economically Active Population: employed and seeking work"
 label var jcf "Beneficiary of Jóvenes Construyendo el Futuro program"
 
-save "Bases\population_english.dta", replace
+save "data/processed/population_english.dta", replace
 
 
  foreach var in sev_walk sev_see sev_arm sev_learn sev_hear sev_dress sev_talk sev_ment{
@@ -342,7 +343,7 @@ save "Bases\population_english.dta", replace
 
 clear
 
-use "Bases\income_english.dta"
+use "data/processed/income_english.dta"
 
 merge 1:m folioviv foliohog numren using "Bases\population_english.dta", nogen
 merge m:1 folioviv foliohog numren using "Bases\work_english.dta", nogen
@@ -350,7 +351,7 @@ merge m:1 folioviv foliohog numren using "Bases\work_english.dta", nogen
 
 
 
-save "Bases\disability_work.dta", replace
+save "data/processed/disability_work.dta", replace
 
 
 
