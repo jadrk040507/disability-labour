@@ -1,15 +1,15 @@
-import pandas as pd
 import numpy as np
-from tabulate import tabulate
-import matplotlib.pyplot as plt
-
 from pathlib import Path
+
+import pandas as pd
 
 # Repository root directory
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 # Raw data folder location
 DATA_DIR = BASE_DIR / 'data' / 'raw'
+PROCESSED_DIR = BASE_DIR / 'data' / 'processed'
+PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 ################################################################################
 #                                                                              #
@@ -65,15 +65,16 @@ work_df['indep'] = (work_df['indep'] == 1).astype(int)
 work_df = work_df.rename(columns={'indep': 'self_emp'})
 
 
-work_df['no_wage'] = 0
-work_df.loc[(work_df['tiene_suel'] == 1), 'no_wage'] = 1
+work_df['no_wage'] = np.nan
+work_df.loc[work_df['tiene_suel'] == 1, 'no_wage'] = 0
+work_df.loc[work_df['tiene_suel'] == 2, 'no_wage'] = 1
 
 # Using already existing variables
 # Keeping so far: folioviv foliohog numren informal tempo no_pay htrab scian(sector) sinco(type of job) leg_ben extra_ben 
 work_df = work_df[['folioviv', 'foliohog', 'numren', 'subor', 'self_emp', 'htrab', 'sinco', 'scian', 'leg_ben', 'extra_ben', 'informal', 'tempo', 'no_pay', 'no_wage']]
 work_df = work_df.sort_values(by = ['folioviv', 'foliohog', 'numren'])
 
-work_df.to_csv(BASE_DIR / 'data' / 'processed' / 'work_english.csv', index=False)
+work_df.to_csv(PROCESSED_DIR / 'work_english.csv', index=False)
 
 ################################################################################
 #                                                                              #
@@ -110,7 +111,7 @@ income_df['other'] = np.where(income_df['other'] < 0, 0, income_df['other'])
 income_df = income_df[['folioviv', 'foliohog', 'numren', 'wage', 'work_inc', 'dis_ben', 'other']]
 income_df = income_df.sort_values(by = ['folioviv', 'foliohog', 'numren'])
 
-income_df.to_csv(BASE_DIR / 'data' / 'processed' / 'income_english.csv', index=False)
+income_df.to_csv(PROCESSED_DIR / 'income_english.csv', index=False)
 
 ################################################################################
 #                                                                              #
@@ -145,7 +146,7 @@ population_df['female'] = (population_df['sexo'] == 2).astype(int)
 
 # Consider married people those who live together and/or are legally married
 population_df['married'] = 0
-population_df.loc[(population_df['edo_conyug'] == 1) | (population_df['edo_conyug'] == 1), 'married'] = 1
+population_df.loc[population_df['edo_conyug'].isin([1, 5]), 'married'] = 1
 
 # Following CONEVAL, define ethnicity based on speaking an indigenous tongue
 population_df['isp'] = (population_df['hablaind'] == 1).astype(int)
@@ -210,7 +211,7 @@ population_df['sev_hear'] = 0
 population_df.loc[population_df['disc_oir'] == 2, 'sev_hear'] = 1
 population_df.loc[population_df['disc_oir'] == 1, 'sev_hear'] = 2
 
-population_df['sev_vest'] = 0
+population_df['sev_dress'] = 0
 population_df.loc[population_df['disc_vest'] == 2, 'sev_dress'] = 1
 population_df.loc[population_df['disc_vest'] == 1, 'sev_dress'] = 2
 
@@ -258,7 +259,7 @@ population_df['secondary'] = (population_df['nivelaprob'] == 3).astype(int)
 population_df['bac'] = 0
 population_df.loc[(population_df['nivelaprob'] == 4) | (population_df['nivelaprob'] == 5), 'bac'] = 1
 population_df['higher'] = 0
-population_df.loc[(population_df['nivelaprob'] == 6) | (population_df['nivelaprob'] == 7) | (population_df['nivelaprob'] == 8) | (population_df['nivelaprob'] == 9), 'bac'] = 1
+population_df.loc[population_df['nivelaprob'].isin([6, 7, 8, 9]), 'higher'] = 1
 
 ##############################Job related variables##############################
 # We can build an experience dummy based on the number of years spent contributing to social security: we only have this data for subordinate persons in formal jobs
@@ -286,11 +287,11 @@ population_df = population_df[
         'folioviv', 'foliohog', 'numren', 'age', 'female', 'married', 'children', 'isp',
         'health_prob', 'time_health', 'illiterate', 'less_primary', 'primary', 'secondary',
         'bac', 'higher', 'ss', 'exp', 'help_job', 'hours_wk', 'hours_vol', 'work_lwk',
-        'job_seeking', 'pea', 'work_dis', 'jcf'
+        'job_seeking', 'pea', 'work_dis', 'jcd'
     ] or col.startswith('dis') or col.startswith('cause')]
 ]
 
-population_df.to_csv(BASE_DIR / 'data' / 'processed' / 'population_english.csv', index=False)
+population_df.to_csv(PROCESSED_DIR / 'population_english.csv', index=False)
 
 ################################################################################
 #                                                                              #
@@ -301,4 +302,4 @@ population_df.to_csv(BASE_DIR / 'data' / 'processed' / 'population_english.csv',
 merged_df = pd.merge(income_df, population_df, on=['folioviv', 'foliohog', 'numren'], how='left')
 merged_df = pd.merge(merged_df, work_df, on=['folioviv', 'foliohog', 'numren'], how='left')
 
-merged_df.to_csv(BASE_DIR / "data" / "processed" / "disability_work.csv", index=False)
+merged_df.to_csv(PROCESSED_DIR / "disability_work.csv", index=False)

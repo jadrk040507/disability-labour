@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use the software, please cite this repository. Cite the paper separately for the research design and findings."
+title: "Disability and labor-market outcomes in Mexico: reproducibility code"
+type: software
+authors:
+  - family-names: "Díaz Raimond Kedilhac"
+    given-names: "Juan Alvaro"
+repository-code: "https://github.com/jadrk040507/disability-labour"
+license: MIT
+version: 0.1.0
+date-released: 2026-09-21
+preferred-citation:
+  type: thesis
+  title: "Disability and Labor Market Outcomes in Mexico"
+  authors:
+    - family-names: "Favela Cantarero"
+      given-names: "María José"
+  year: 2023
+  institution:
+    name: "Universidad de Navarra"

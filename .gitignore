@@ -1,7 +1,21 @@
 .Rhistory
 .RData
 .Rproj.user/
+.venv/
 __pycache__/
 *.py[cod]
-data/raw/
-data/processed/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# ENIGH microdata and person-level derivatives
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated tables and model output
+outputs/*
+!outputs/.gitkeep
