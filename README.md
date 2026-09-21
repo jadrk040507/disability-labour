@@ -22,4 +22,4 @@ The Python, R, and Stata entry points use repository-relative paths. Run them fr
 
 ## Scope
 
-This is a research-code repository rather than a packaged library. The Python workflow is the primary reproducible path; the R and Stata files preserve model and data-preparation variants and may require version-specific adjustments. Results from survey microdata should account for the ENIGH sampling design before they are used for population inference.
+This is a research-code repository rather than a packaged library. The Python workflow is the primary reproducible path; the R and Stata files preserve model and data-preparation variants and may require version-specific adjustments. Results from survey microdata should account for the ENOE sampling design before they are used for population inference.
